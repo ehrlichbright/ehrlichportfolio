@@ -360,13 +360,35 @@ section + section { border-top: 1px solid var(--line); }
   padding: 8px 0 0;
 }
 /* Width is capped by viewport height as well as width, so the whole
-   landing — headline, hanger, hint and nav — fits one screen on short
-   windows. 420/356 is the SVG's own aspect ratio. */
+   landing — headline, hanger and nav — fits one screen on short
+   windows. 0.864 is the SVG's own aspect ratio (420/486). */
 .hanger-svg {
-  width: min(500px, 88vw, calc(42svh * 1.18));
+  width: min(500px, 88vw, calc(52svh * 0.864));
   height: auto;
   overflow: visible;
 }
+
+/* --- the lake ---------------------------------------------------------
+   Each ripple drifts by exactly one wave period, so the loop is
+   seamless. Alternating directions read as water rather than a
+   conveyor belt. */
+@keyframes rippleDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-48px); }
+}
+@keyframes rippleDriftBack {
+  from { transform: translateX(-48px); }
+  to   { transform: translateX(0); }
+}
+
+.ripple {
+  animation: rippleDrift 9s linear infinite;
+  will-change: transform;
+}
+.ripple-1 { animation: rippleDriftBack 13s linear infinite; }
+.ripple-2 { animation-duration: 17s; }
+.ripple-3 { animation: rippleDriftBack 21s linear infinite; }
+.ripple-4 { animation-duration: 27s; }
 
 /* --- each bag is a link into its case study --- */
 .bag-link { cursor: pointer; outline: none; }
@@ -933,6 +955,7 @@ section + section { border-top: 1px solid var(--line); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }
-  /* the bags settle and hang still */
+  /* the bags settle and the lake goes glassy */
   .bag { animation: none !important; transform: rotate(0deg) !important; }
+  .ripple { animation: none !important; }
 }

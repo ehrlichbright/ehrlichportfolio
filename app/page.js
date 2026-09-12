@@ -16,10 +16,6 @@ export default function Home() {
         {/* One bag per case study, hung on a prong. Capped at 4. */}
         <HangingBags items={work} />
 
-        <p className="landing-hint">
-          Pick a bag to open the case study
-        </p>
-
         <nav className="landing-nav">
           <Link href="/story">The story</Link>
           <span className="dot" aria-hidden="true">·</span>
