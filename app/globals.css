@@ -164,7 +164,21 @@ h1, h2, h3 {
 .nav { display: flex; gap: 30px; align-items: center; }
 .nav a { font-size: 14px; color: var(--ink-2); transition: color .18s ease; }
 .nav a:hover { color: var(--ink); }
-@media (max-width: 780px) { .nav .nav-hide { display: none; } .logo span { display: none; } }
+/* Small screens keep every link reachable — hiding them left no route
+   to Work or Story from a case study page. Tighten, don't remove. */
+@media (max-width: 780px) {
+  .header-inner { height: 62px; gap: 12px; }
+  .logo { font-size: 17px; }
+  .logo span { display: none; }
+  .nav { gap: 16px; }
+  .nav a { font-size: 13px; }
+  .nav .btn { padding: 9px 15px; font-size: 13px; }
+}
+@media (max-width: 420px) {
+  .nav { gap: 13px; }
+  .nav a { font-size: 12.5px; }
+  .nav .btn { padding: 8px 13px; font-size: 12.5px; }
+}
 
 /* ============================================================
    BUTTONS
@@ -265,11 +279,11 @@ section + section { border-top: 1px solid var(--line); }
 }
 .landing-line {
   font-family: var(--serif);
-  font-size: clamp(22px, 3.4vw, 34px);
-  line-height: 1.22;
-  letter-spacing: -0.02em;
+  font-size: clamp(24px, 4vw, 42px);
+  line-height: 1.16;
+  letter-spacing: -0.025em;
   color: var(--ink);
-  max-width: 20ch;
+  max-width: 18ch;
   margin: 0 auto;
 }
 .landing-line em { font-style: italic; color: var(--accent); }
@@ -312,7 +326,14 @@ section + section { border-top: 1px solid var(--line); }
   place-items: center;
   padding: 8px 0 0;
 }
-.hanger-svg { width: 100%; max-width: 520px; height: auto; overflow: visible; }
+/* Width is capped by viewport height as well as width, so the whole
+   landing — headline, hanger, hint and nav — fits one screen on short
+   windows. 420/356 is the SVG's own aspect ratio. */
+.hanger-svg {
+  width: min(500px, 88vw, calc(42svh * 1.18));
+  height: auto;
+  overflow: visible;
+}
 
 /* --- each bag is a link into its case study --- */
 .bag-link { cursor: pointer; outline: none; }

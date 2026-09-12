@@ -61,9 +61,10 @@ export default function HangingBags({ items = [] }) {
         aria-label={`${count} client ${count === 1 ? "bag" : "bags"} hanging from a ${count}-pronged hook`}
       >
         <defs>
-          <linearGradient id="bagFace" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(255,255,255,.075)" />
-            <stop offset="100%" stopColor="rgba(255,255,255,.022)" />
+          <linearGradient id="bagFace" x1="0" y1="0" x2="0.35" y2="1">
+            <stop offset="0%" stopColor="rgba(255,255,255,.15)" />
+            <stop offset="55%" stopColor="rgba(255,255,255,.075)" />
+            <stop offset="100%" stopColor="rgba(255,255,255,.03)" />
           </linearGradient>
           {/* userSpaceOnUse is required: straight lines have a zero-area
               bounding box, so an objectBoundingBox gradient would not paint. */}
@@ -166,10 +167,10 @@ export default function HangingBags({ items = [] }) {
                 stroke="var(--line-2)" strokeWidth="1.1" opacity=".75"
               />
 
-              {/* accent band */}
+              {/* accent band across the top of the bag */}
               <rect
                 x={left + 1} y={BAG_TOP} width={BAG_W - 2} height="15"
-                fill="var(--accent)" opacity=".16"
+                fill="var(--accent)" opacity=".55"
               />
 
               {/* label, stacked so it fits the narrow bag */}
