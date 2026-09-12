@@ -367,9 +367,9 @@ section + section { border-top: 1px solid var(--line); }
 }
 /* Width is capped by viewport height as well as width, so the whole
    landing — headline, hanger and nav — fits one screen on short
-   windows. 0.864 is the SVG's own aspect ratio (420/486). */
+   windows. 0.84 is the SVG's own aspect ratio (420/500). */
 .hanger-svg {
-  width: min(500px, 88vw, calc(52svh * 0.864));
+  width: min(500px, 88vw, calc(52svh * 0.84));
   height: auto;
   overflow: visible;
 }
@@ -395,6 +395,7 @@ section + section { border-top: 1px solid var(--line); }
 .ripple-2 { animation-duration: 17s; }
 .ripple-3 { animation: rippleDriftBack 21s linear infinite; }
 .ripple-4 { animation-duration: 27s; }
+.ripple-5 { animation: rippleDriftBack 33s linear infinite; }
 
 /* --- each bag is a link into its case study --- */
 .bag-link { cursor: pointer; outline: none; }

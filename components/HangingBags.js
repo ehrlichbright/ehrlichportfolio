@@ -14,7 +14,7 @@ const MAX_PRONGS = 4;
 
 // -- geometry ------------------------------------------------------------
 const VB_W = 420;
-const VB_H = 486;
+const VB_H = 500;
 const CENTRE = VB_W / 2;
 
 const PLATE_Y = 26;    // wall plate
@@ -29,6 +29,15 @@ const BAG_BOTTOM = 336;
 
 const WATER_Y = 356;   // the surface. Reflections mirror about this line.
 const RIPPLE_PERIOD = 48;
+
+/**
+ * Vertical squash applied to the reflection. A straight 1:1 mirror puts
+ * the bags' tops at y=512, past the bottom of the viewBox, so only their
+ * bases showed. Foreshortening is what perspective does to water viewed
+ * at an angle anyway, and it fits the whole bag in the space available:
+ *   BAG_TOP 200 -> 356 + 0.75 * 156 = 473, comfortably inside VB_H.
+ */
+const REFLECT_SCALE = 0.75;
 
 // Bags hang 13px right of each prong shaft (at the hook's cradle), so the
 // prongs sit slightly left of centre to keep the whole group visually centred.
@@ -201,8 +210,9 @@ export default function HangingBags({ items = [] }) {
             gradientUnits="userSpaceOnUse"
             x1="0" y1={WATER_Y} x2="0" y2={VB_H}
           >
-            <stop offset="0%" stopColor="#fff" stopOpacity=".95" />
-            <stop offset="40%" stopColor="#fff" stopOpacity=".45" />
+            <stop offset="0%" stopColor="#fff" stopOpacity="1" />
+            <stop offset="45%" stopColor="#fff" stopOpacity=".8" />
+            <stop offset="78%" stopColor="#fff" stopOpacity=".4" />
             <stop offset="100%" stopColor="#fff" stopOpacity="0" />
           </linearGradient>
           <mask id="reflectionMask">
@@ -306,14 +316,25 @@ export default function HangingBags({ items = [] }) {
           />
 
           {/* mirrored bags, dissolving with depth */}
-          <g
-            mask="url(#reflectionMask)"
-            transform={`translate(0 ${WATER_Y * 2}) scale(1 -1)`}
-            aria-hidden="true"
-          >
-            {xs.map((x, i) => (
-              <Bag key={`refl-${i}`} x={x} index={i} item={items[i]} mirrored />
-            ))}
+          {/* The mask and the transform MUST live on separate elements.
+              A mask is resolved in its element's own user space, and that
+              space includes the element's transform — so putting both on
+              one group mirrors the mask too, and it ends up above the
+              waterline masking the reflection away entirely.
+              Outer group: masked, untransformed.
+              Inner group: transformed, unmasked.
+
+              translate(0, WATER_Y*(1+s)) scale(1,-s) maps y to
+              WATER_Y + s*(WATER_Y - y) — a mirror about the waterline
+              with vertical foreshortening. */}
+          <g mask="url(#reflectionMask)" aria-hidden="true">
+            <g
+              transform={`translate(0 ${WATER_Y * (1 + REFLECT_SCALE)}) scale(1 -${REFLECT_SCALE})`}
+            >
+              {xs.map((x, i) => (
+                <Bag key={`refl-${i}`} x={x} index={i} item={items[i]} mirrored />
+              ))}
+            </g>
           </g>
 
           {/* the surface line */}
@@ -330,6 +351,7 @@ export default function HangingBags({ items = [] }) {
             <path className="ripple ripple-2" d={wavePath(WATER_Y + 50, 3.2)} stroke="rgb(var(--accent-rgb))" strokeOpacity=".19" strokeWidth="1.3" />
             <path className="ripple ripple-3" d={wavePath(WATER_Y + 74, 4.0)} stroke="rgb(var(--accent-2-rgb))" strokeOpacity=".16" strokeWidth="1.4" />
             <path className="ripple ripple-4" d={wavePath(WATER_Y + 101, 4.8)} stroke="rgb(var(--accent-rgb))" strokeOpacity=".11" strokeWidth="1.5" />
+            <path className="ripple ripple-5" d={wavePath(WATER_Y + 128, 5.6)} stroke="rgb(var(--accent-2-rgb))" strokeOpacity=".09" strokeWidth="1.6" />
           </g>
         </g>
       </svg>
