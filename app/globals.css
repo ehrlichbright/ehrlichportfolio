@@ -13,27 +13,31 @@
 :root {
   color-scheme: dark;
 
-  /* --- ground & surfaces --- */
-  --bg:        #0a0a0c;   /* page ground */
-  --bg-2:      #101014;   /* recessed / alternate sections */
-  --card:      #131318;   /* raised surfaces */
-  --card-2:    #17171d;   /* hover state */
+  /* --- ground & surfaces: neutral blacks, no colour cast --- */
+  --bg:        #08080a;   /* page ground */
+  --bg-2:      #101013;   /* recessed / alternate sections */
+  --card:      #141418;   /* raised surfaces */
+  --card-2:    #1a1a1f;   /* hover state */
 
-  /* --- ink --- */
-  --ink:       #f5f4f2;   /* headlines */
-  --ink-2:     #a5a3a8;   /* body copy */
-  --ink-3:     #6c6a72;   /* labels, meta, captions */
+  /* --- ink: true white down to grey --- */
+  --ink:       #ffffff;   /* headlines */
+  --ink-2:     #b6b6c0;   /* body copy */
+  --ink-3:     #77777f;   /* labels, meta, captions */
 
   /* --- lines --- */
-  --line:      #232329;
-  --line-2:    #33333c;   /* hover / emphasis */
+  --line:      #24242a;
+  --line-2:    #37373f;   /* hover / emphasis */
 
-  /* --- ACCENT: the one colour. Change this and the site re-skins. --- */
-  --accent:      #ff6b4a;             /* vivid coral */
-  --accent-2:    #7c6bff;             /* secondary, gradients only */
-  --accent-ink:  #0a0a0c;             /* text on top of accent */
-  --accent-soft: rgba(255,107,74,.12);
-  --accent-line: rgba(255,107,74,.28);
+  /* --- ACCENT: the one colour. Change these three and the site re-skins.
+         It must stay LIGHT enough to carry near-black text on top:
+         #a78bfa against #0a0a0c is 7.2:1, comfortably past WCAG AA. --- */
+  --accent:      #a78bfa;      /* light violet */
+  --accent-rgb:  167 139 250;  /* same colour, channels only, for alphas */
+  --accent-2-rgb: 109 74 255;  /* deeper violet, used in glows only */
+  --accent-ink:  #0a0a0c;      /* text on top of accent */
+
+  --accent-soft: rgb(var(--accent-rgb) / .13);
+  --accent-line: rgb(var(--accent-rgb) / .32);
 
   --radius:  16px;
   --radius-s: 10px;
@@ -74,9 +78,9 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(680px 420px at 78% -6%,  rgba(255,107,74,.16), transparent 70%),
-    radial-gradient(560px 400px at 4%  12%,  rgba(124,107,255,.10), transparent 70%),
-    radial-gradient(900px 600px at 50% 108%, rgba(255,107,74,.07), transparent 70%);
+    radial-gradient(680px 420px at 78% -6%,  rgb(var(--accent-rgb) / .15), transparent 70%),
+    radial-gradient(560px 400px at 4%  12%,  rgb(var(--accent-2-rgb) / .13), transparent 70%),
+    radial-gradient(900px 600px at 50% 108%, rgb(var(--accent-rgb) / .07), transparent 70%);
 }
 
 /* --- GRAIN: keeps the black from reading as a flat swatch. --- */
@@ -162,8 +166,10 @@ h1, h2, h3 {
   letter-spacing: .16em; text-transform: uppercase; margin-left: 12px;
 }
 .nav { display: flex; gap: 30px; align-items: center; }
-.nav a { font-size: 14px; color: var(--ink-2); transition: color .18s ease; }
-.nav a:hover { color: var(--ink); }
+/* :not(.btn) matters — a bare `.nav a` rule outranks `.btn` on
+   specificity and would repaint the button's label grey on violet. */
+.nav a:not(.btn) { font-size: 14px; color: var(--ink-2); transition: color .18s ease; }
+.nav a:not(.btn):hover { color: var(--ink); }
 /* Small screens keep every link reachable — hiding them left no route
    to Work or Story from a case study page. Tighten, don't remove. */
 @media (max-width: 780px) {
@@ -185,17 +191,17 @@ h1, h2, h3 {
    ============================================================ */
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 22px; border-radius: 999px;
-  font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+  padding: 12px 24px; border-radius: 999px;
+  font-size: 14px; font-weight: 700; letter-spacing: -0.005em;
   background: var(--accent); color: var(--accent-ink);
   border: 1px solid var(--accent);
   transition: filter .18s ease, box-shadow .18s ease;
 }
-.btn:hover { filter: brightness(1.1); box-shadow: 0 0 0 5px var(--accent-soft); }
+.btn:hover { filter: brightness(1.08); box-shadow: 0 0 0 5px var(--accent-soft); }
 
 .btn-ghost {
   background: transparent; color: var(--ink);
-  border-color: var(--line-2);
+  border-color: var(--line-2); font-weight: 500;
 }
 .btn-ghost:hover { background: var(--card); border-color: var(--ink-3); box-shadow: none; filter: none; }
 
@@ -405,7 +411,7 @@ section + section { border-top: 1px solid var(--line); }
 .portrait::after {
   content: ""; position: absolute; inset: 0; border-radius: var(--radius);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05),
-              inset 0 -80px 80px -60px rgba(255,107,74,.35);
+              inset 0 -80px 80px -60px rgb(var(--accent-rgb) / .32);
   pointer-events: none;
 }
 .portrait img { width: 100%; height: 100%; object-fit: cover; }
@@ -606,7 +612,7 @@ section + section { border-top: 1px solid var(--line); }
 #contact { padding-bottom: 128px; }
 .contact-box {
   background:
-    linear-gradient(160deg, rgba(255,107,74,.10), transparent 46%),
+    linear-gradient(160deg, rgb(var(--accent-rgb) / .12), transparent 46%),
     var(--card);
   border: 1px solid var(--line);
   border-radius: 22px;
