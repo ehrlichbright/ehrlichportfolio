@@ -4,9 +4,10 @@
    Next strips remote @import rules out of the compiled CSS, which
    silently drops every webfont back to a system substitute.
 
-   Headlines: Helvetica Neue (macOS/iOS only; licensed, can't be
-   self-hosted), falling back to Arimo, which is metrically
-   compatible so Windows and Android match.
+   Headlines: Bodoni Moda — a true Didone. Very high stroke contrast,
+   which is what makes it feel regal, and also why it is display-only:
+   the hairlines get fragile below about 20px. Anything smaller than
+   that should be set in --sans instead.
    Body/UI: Inter.
    ============================================================ */
 
@@ -46,10 +47,7 @@
   --radius-s: 10px;
   --max:    1180px;
 
-  /* Arimo sits ahead of Helvetica/Arial deliberately: Windows silently
-     substitutes Arial for "Helvetica", which would skip Arimo entirely
-     and leave Android (no Arial) rendering Roboto instead. */
-  --display: "Helvetica Neue", var(--font-arimo), Helvetica, Arial, sans-serif;
+  --display: var(--font-display), "Didot", "Bodoni MT", Georgia, serif;
   --sans:    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
@@ -107,34 +105,42 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 p { margin: 0; }
 
-/* Helvetica needs weight and tight tracking at display sizes — at 400
-   with default spacing it reads as unstyled rather than designed. */
+/* A Didone wants far looser tracking than a grotesque — tightening it
+   collides the hairlines with the adjacent stems. Weight 600 keeps the
+   thick/thin contrast readable; 700 starts to clog at display sizes. */
 h1, h2, h3 {
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
   font-family: var(--display);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
+  line-height: 1.06;
+  letter-spacing: -0.012em;
 }
 
-/* Non-heading elements set in the display face need the weight too —
-   the old serif carried at 400, Helvetica does not. */
+/* Non-heading elements set in the display face. */
 .logo,
 .landing-line,
 .stat-v,
 .wm-v,
-.service-n,
 .contact-mail,
 .chapter-no,
 .pull-bleed blockquote,
 .cs-band-metrics .v,
 .cs-step-no,
 .cs-next-title {
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.012em;
 }
 
-/* Quotes read better a step down from full bold */
-.quote blockquote { font-weight: 500; }
+/* Quotes read better a step down */
+.quote blockquote { font-weight: 400; letter-spacing: -0.005em; }
+
+/* Too small for a Didone — its hairlines break up at this size, so this
+   label belongs in the sans. */
+.service-n {
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: .12em;
+}
 
 ::selection { background: var(--accent); color: var(--accent-ink); }
 

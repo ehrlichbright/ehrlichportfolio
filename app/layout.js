@@ -1,4 +1,4 @@
-import { Inter, Arimo } from "next/font/google";
+import { Inter, Bodoni_Moda } from "next/font/google";
 import "./globals.css";
 import { site, siteUrl } from "@/content/site";
 
@@ -14,14 +14,13 @@ const inter = Inter({
   display: "swap",
 });
 
-// Fallback for Helvetica Neue, which only ships on macOS/iOS and can't be
-// self-hosted. Arimo is metrically compatible, so Windows and Android get
-// the same measure rather than Arial or Roboto.
-const arimo = Arimo({
+// Display face. A true Didone: very high stroke contrast, so it is used
+// only at large sizes — its hairlines break up below roughly 20px.
+const bodoni = Bodoni_Moda({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-arimo",
+  variable: "--font-display",
   display: "swap",
 });
 import Header from "@/components/Header";
@@ -50,7 +49,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${arimo.variable}`}>
+    <html lang="en" className={`${inter.variable} ${bodoni.variable}`}>
       <body>
         <Header />
         <main>{children}</main>
